@@ -1,0 +1,57 @@
+readings=30
+
+while [[ 1 ]]
+do
+	values=()
+	for c in $(seq 1 $readings)
+	do
+		clear
+		echo watching: "$1"
+		value=$(/bin/sh -c "$1")
+		values+=($value)
+		for vv in "${values[@]}"
+		do
+			if [ "$min" == "" ]
+			then
+				min=$vv
+				max=$vv
+			fi
+			if [ $vv -lt $min ]
+			then
+				min=$vv
+			fi
+			if [ $vv -gt $max ]
+			then
+				max=$vv
+			fi
+			#echo $min $vv $max
+		done
+		
+		range=$(( $max - $min ))
+		if [ $range -eq 0 ]
+		then
+			range=1
+		fi
+		
+	       
+		lines=()
+		for lv in $(seq $max -1 $min)
+		do
+			
+			linedata=() 
+			for r in $(seq 1 $readings )
+			do
+				if [ "${values[$r]}" == "$lv" ]
+				then
+					linedata+=("-")	
+				else
+					linedata+=(".")
+				fi
+			done
+			printf '%5s' $((lv + $min - 1 ))
+			echo -n " "
+			echo " " ${linedata[@]} | sed 's/ //g' | sed 's/\./ /g'
+		done				
+		sleep 1s
+	done
+done

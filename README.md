@@ -1,6 +1,6 @@
-## bashutils
+# bashutils
 
-#watcher
+## watcher
 
 runs the script line in quotes over and over again, producing a chart
 

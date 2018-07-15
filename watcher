@@ -1,4 +1,6 @@
 readings=30
+re='^[0-9]+$'
+#if ! [[ $yournumber =~ $re ]]
 
 while [[ 1 ]]
 do
@@ -11,20 +13,23 @@ do
 		values+=($value)
 		for vv in "${values[@]}"
 		do
-			if [ "$min" == "" ]
+			if [[ $vv =~ $re ]]
 			then
-				min=$vv
-				max=$vv
+				if [ "$min" == "" ]
+				then
+					min=$vv
+					max=$vv
+				fi
+				if [ $vv -lt $min ]
+				then
+					min=$vv
+				fi
+				if [ $vv -gt $max ]
+				then
+					max=$vv
+				fi
+				#echo $min $vv $max
 			fi
-			if [ $vv -lt $min ]
-			then
-				min=$vv
-			fi
-			if [ $vv -gt $max ]
-			then
-				max=$vv
-			fi
-			#echo $min $vv $max
 		done
 		
 		range=$(( $max - $min ))
